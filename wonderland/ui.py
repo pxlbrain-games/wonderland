@@ -1,4 +1,5 @@
 import os
+import random
 
 import arcade
 
@@ -7,14 +8,66 @@ RESOURCE_PATH: str = os.path.join(os.path.dirname(__file__), "resources")
 FONT: str = "Gabriola"
 
 
+class Word:
+    """
+    Display a word on the screen
+
+    """
+
+    text_color: arcade.arcade_types.Color = arcade.color.ALICE_BLUE
+
+    def __init__(self, text: str, center_x: float = 0.0, center_y: float = 0.0):
+        self.text = text
+        self.center_x = center_x
+        self.center_y = center_y
+        self.scale = 1.0
+
+    def draw(self):
+        arcade.text.draw_text(
+            text=self.text,
+            start_x=self.center_x,
+            start_y=self.center_y,
+            color=self.text_color,
+            font_name=FONT,
+            font_size=int(self.scale * 15),
+            anchor_x="center",
+        )
+
+
+class WordCloud:
+    """
+    Arrange words in an interactive word cloud
+
+    """
+
+    def __init__(self, center_x: float, center_y: float, width: float, height: float, words: list = None):
+        self.center_x = center_x
+        self.center_y = center_y
+        self.width = width
+        self.height = height
+        self._words = list() if words is None else words
+        self._arrange_words()
+
+    def _arrange_words(self):
+        for word in self._words:
+            word.center_x = self.center_x + (random.random() - 0.5) * self.width
+            word.center_y = self.center_y + (random.random() - 0.5) * self.height
+
+    def append(self, word: Word):
+        self._words.append(word)
+        self._arrange_words()
+
+    def draw(self):
+        for word in self._words:
+            word.draw()
+
+
 class Card(arcade.SpriteList):
     """
     Represent a game world entity as a card with image and text content.
 
     """
 
-    background_color: arcade.arcade_types.Color = arcade.color.DARK_CERULEAN
-    shadow_color: arcade.arcade_types.Color = arcade.color.BLACK
     title_color: arcade.arcade_types.Color = arcade.color.BLACK
     title_font: str = FONT
 

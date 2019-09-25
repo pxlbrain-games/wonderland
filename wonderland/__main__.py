@@ -1,6 +1,6 @@
 import arcade
 
-from wonderland.ui import Card, CardRow
+from wonderland.ui import Card, CardRow, Word, WordCloud
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -20,10 +20,14 @@ class Wonderland(arcade.Window):
         # If you have sprite lists, you should create them here,
         # and set them to None
         self.card_row: CardRow = None
+        self.word_cloud: WordCloud = None
 
     def setup(self):
         # Create your sprites and sprite lists here
-        self.card_row = CardRow(SCREEN_WIDTH / 2, 120, 500)
+        self.word_cloud = WordCloud(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.8, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT * 0.2)
+        for _ in range(5):
+            self.word_cloud.append(Word("Hello"))
+        self.card_row = CardRow(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.2, SCREEN_WIDTH * 0.7)
         for _ in range(4):
             self.card_row.append(Card("Foobar"))
 
@@ -37,6 +41,7 @@ class Wonderland(arcade.Window):
         arcade.start_render()
 
         # Call draw() on all your sprite lists below
+        self.word_cloud.draw()
         self.card_row.draw()
 
     def update(self, delta_time):
