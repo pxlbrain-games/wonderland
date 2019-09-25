@@ -1,5 +1,7 @@
 import arcade
 
+from wonderland.ui import Card, CardRow
+
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Wonderland Prototype"
@@ -17,10 +19,16 @@ class Wonderland(arcade.Window):
 
         # If you have sprite lists, you should create them here,
         # and set them to None
+        self.card_row: CardRow = None
 
     def setup(self):
         # Create your sprites and sprite lists here
-        pass
+        cards = list()
+        for i in reversed(range(10)):
+            card = Card("Foobar", SCREEN_WIDTH / 2 - 60 * (i - 5), 120)
+            card.scale = 1
+            cards.append(card)
+        self.card_row = CardRow(cards)
 
     def on_draw(self):
         """
@@ -32,6 +40,7 @@ class Wonderland(arcade.Window):
         arcade.start_render()
 
         # Call draw() on all your sprite lists below
+        self.card_row.draw()
 
     def update(self, delta_time):
         """
@@ -60,7 +69,7 @@ class Wonderland(arcade.Window):
         """
         Called whenever the mouse moves.
         """
-        pass
+        self.card_row.on_mouse_motion(x, y)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
@@ -73,6 +82,7 @@ class Wonderland(arcade.Window):
         Called when a user releases a mouse button.
         """
         pass
+
 
 game = Wonderland(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 game.setup()
