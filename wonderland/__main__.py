@@ -23,12 +23,9 @@ class Wonderland(arcade.Window):
 
     def setup(self):
         # Create your sprites and sprite lists here
-        cards = list()
-        for i in reversed(range(10)):
-            card = Card("Foobar", SCREEN_WIDTH / 2 - 60 * (i - 5), 120)
-            card.scale = 1
-            cards.append(card)
-        self.card_row = CardRow(cards)
+        self.card_row = CardRow(SCREEN_WIDTH / 2, 120, 500)
+        for _ in range(4):
+            self.card_row.append(Card("Foobar"))
 
     def on_draw(self):
         """
