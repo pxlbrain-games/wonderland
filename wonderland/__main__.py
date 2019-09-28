@@ -72,6 +72,7 @@ class Wonderland(arcade.Window):
         Called whenever the mouse moves.
         """
         self.card_row.on_mouse_motion(x, y)
+        self.word_cloud.on_mouse_motion(x, y)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
