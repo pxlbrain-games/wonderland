@@ -1,8 +1,10 @@
 import arcade
 
 from wonderland.ui import Card, CardRow, Word, WordCloud
+from wonderland.screens.scene import Scene
 
 SCREEN_TITLE = "Wonderland Prototype"
+
 
 class Wonderland(arcade.Window):
     """
@@ -16,8 +18,7 @@ class Wonderland(arcade.Window):
 
         # If you have sprite lists, you should create them here,
         # and set them to None
-        self.card_row: CardRow = None
-        self.word_cloud: WordCloud = None
+        self.scene = Scene()
 
     @property
     def width(self):
@@ -29,12 +30,7 @@ class Wonderland(arcade.Window):
 
     def setup(self):
         # Create your sprites and sprite lists here
-        self.word_cloud = WordCloud(self.width / 2, self.height * 0.8, self.width * 0.6, self.height * 0.2)
-        for _ in range(5):
-            self.word_cloud.append(Word("Hello"))
-        self.card_row = CardRow(self.width / 2, self.height * 0.2, min(self.width * 0.7, 724))
-        for _ in range(4):
-            self.card_row.append(Card("Foobar"))
+        self.scene.setup(self.width, self.height)
 
     def on_draw(self):
         """
@@ -46,8 +42,7 @@ class Wonderland(arcade.Window):
         arcade.start_render()
 
         # Call draw() on all your sprite lists below
-        self.word_cloud.draw()
-        self.card_row.draw()
+        self.scene.draw()
 
     def update(self, delta_time):
         """
@@ -76,8 +71,7 @@ class Wonderland(arcade.Window):
         """
         Called whenever the mouse moves.
         """
-        self.card_row.on_mouse_motion(x, y)
-        self.word_cloud.on_mouse_motion(x, y)
+        self.scene.on_mouse_motion(x, y)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
