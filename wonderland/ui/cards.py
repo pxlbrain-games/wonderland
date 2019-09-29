@@ -18,7 +18,6 @@ class Card(UIElement):
     title_font: str = FONT
 
     def __init__(self, title: str, center_x: float = 0.0, center_y: float = 0.0, scale: float = 1.0) -> None:
-        super().__init__()
         self.title: str = title
         self._center_x: float = center_x
         self._center_y: float = center_y

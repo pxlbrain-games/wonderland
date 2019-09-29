@@ -1,5 +1,5 @@
 from wonderland.screens.screen_base import Screen
-from wonderland.ui import Card
+from wonderland.ui import Card, Button
 
 
 class CardCreator(Screen):
@@ -10,12 +10,15 @@ class CardCreator(Screen):
 
     def __init__(self) -> None:
         self.card: Card = None
+        self.button: Button = None
 
     def setup(self, width: int, height: int) -> None:
         self.card = Card(title="Untitled", center_x=width / 2, center_y=height / 2, scale=3.0)
+        self.button = Button(text="Click Me", center_x=width / 4, center_y=height * 0.8)
 
     def draw(self) -> None:
         self.card.draw()
+        self.button.draw()
 
     def on_mouse_motion(self, x: float, y: float) -> None:
         pass

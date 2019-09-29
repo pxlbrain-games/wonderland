@@ -14,6 +14,7 @@ class Word(UIElement):
     """
 
     text_color: arcade.arcade_types.Color = arcade.color.ALICE_BLUE
+    font_size: int = 15
 
     def __init__(self, text: str, center_x: float = 0.0, center_y: float = 0.0):
         self.text: str = text
@@ -23,11 +24,11 @@ class Word(UIElement):
 
     @property
     def width(self) -> float:
-        return len(self.text) * self.scale * 15
+        return len(self.text) * self.scale * self.font_size * 0.5
 
     @property
     def height(self) -> float:
-        return self.scale * 20
+        return self.scale * self.font_size * 1.25
 
     def collides_with_point(self, point: arcade.arcade_types.Point) -> bool:
         return (self.center_x - self.width / 2 < point[0] < self.center_x + self.width / 2) and (
@@ -41,8 +42,9 @@ class Word(UIElement):
             start_y=self.center_y,
             color=self.text_color,
             font_name=FONT,
-            font_size=int(self.scale * 15),
+            font_size=int(self.scale * self.font_size),
             anchor_x="center",
+            anchor_y="center",
         )
 
 
