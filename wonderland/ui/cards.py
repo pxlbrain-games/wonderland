@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import arcade
 
@@ -16,19 +17,19 @@ class Card(UIElement):
     title_color: arcade.arcade_types.Color = arcade.color.BLACK
     title_font: str = FONT
 
-    def __init__(self, title: str, center_x: float = 0.0, center_y: float = 0.0, scale: float = 1.0):
+    def __init__(self, title: str, center_x: float = 0.0, center_y: float = 0.0, scale: float = 1.0) -> None:
         super().__init__()
-        self.title = title
-        self._center_x = center_x
-        self._center_y = center_y
-        self._scale = scale
-        self.background = arcade.Sprite(
+        self.title: str = title
+        self._center_x: float = center_x
+        self._center_y: float = center_y
+        self._scale: float = scale
+        self.background: arcade.Sprite = arcade.Sprite(
             filename=os.path.join(RESOURCE_PATH, "card_background.png"),
             scale=self.scale * 0.3,
             center_x=center_x,
             center_y=center_y,
         )
-        self.sprite_list = arcade.SpriteList()
+        self.sprite_list: arcade.SpriteList = arcade.SpriteList()
         self.sprite_list.center_x = center_x
         self.sprite_list.center_y = center_y
         self.sprite_list.append(self.background)
@@ -82,14 +83,14 @@ class CardRow(UIElement):
 
     highlight_scale: float = 1.6
 
-    def __init__(self, center_x: float, center_y: float, width: float, cards: list = None):
-        self.center_x = center_x
-        self.center_y = center_y
-        self.width = width
-        self._cards = list() if cards is None else cards
-        self.highlighted_card = None
+    def __init__(self, center_x: float, center_y: float, width: float, cards: List[Card] = None) -> None:
+        self.center_x: float = center_x
+        self.center_y: float = center_y
+        self.width: float = width
+        self._cards: List[Card] = list() if cards is None else cards
+        self.highlighted_card: Card = None
 
-    def _arrange_cards(self):
+    def _arrange_cards(self) -> None:
         for i, card in enumerate(reversed(self._cards)):
             card.center_x = self.center_x + self.width * (i / (len(self._cards) - 1) - 0.5)
             card.center_y = self.center_y
@@ -98,10 +99,10 @@ class CardRow(UIElement):
                 card.scale = self.highlight_scale
                 card.center_y += card.background.height * 0.2
 
-    def append(self, card: Card):
+    def append(self, card: Card) -> None:
         self._cards.append(card)
 
-    def draw(self):
+    def draw(self) -> None:
         self._arrange_cards()
         for card in self._cards:
             if card is not self.highlighted_card:

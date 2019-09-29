@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 import arcade
 
@@ -15,25 +16,25 @@ class Word(UIElement):
     text_color: arcade.arcade_types.Color = arcade.color.ALICE_BLUE
 
     def __init__(self, text: str, center_x: float = 0.0, center_y: float = 0.0):
-        self.text = text
-        self.center_x = center_x
-        self.center_y = center_y
-        self.scale = 1.0
+        self.text: str = text
+        self.center_x: float = center_x
+        self.center_y: float = center_y
+        self.scale: float = 1.0
 
     @property
-    def width(self):
+    def width(self) -> float:
         return len(self.text) * self.scale * 15
 
     @property
-    def height(self):
+    def height(self) -> float:
         return self.scale * 20
 
-    def collides_with_point(self, point):
+    def collides_with_point(self, point: arcade.arcade_types.Point) -> bool:
         return (self.center_x - self.width / 2 < point[0] < self.center_x + self.width / 2) and (
             self.center_y - self.height / 2 < point[1] < self.center_y + self.height / 2
         )
 
-    def draw(self):
+    def draw(self) -> None:
         arcade.text.draw_text(
             text=self.text,
             start_x=self.center_x,
@@ -51,16 +52,18 @@ class WordCloud(UIElement):
 
     """
 
-    highlight_scale = 2.0
+    highlight_scale: float = 2.0
 
-    def __init__(self, center_x: float, center_y: float, width: float, height: float, words: list = None):
-        self.center_x = center_x
-        self.center_y = center_y
-        self.width = width
-        self.height = height
-        self._words = list() if words is None else words
+    def __init__(
+        self, center_x: float, center_y: float, width: float, height: float, words: List[Word] = None
+    ) -> None:
+        self.center_x: float = center_x
+        self.center_y: float = center_y
+        self.width: float = width
+        self.height: float = height
+        self._words: List[Word] = list() if words is None else words
         self._arrange_words()
-        self.highlighted_word = None
+        self.highlighted_word: Word = None
 
     def _arrange_words(self) -> None:
         for word in self._words:

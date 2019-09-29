@@ -8,7 +8,7 @@ class CardCreator(Screen):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.card: Card = None
 
     def setup(self, width: int, height: int) -> None:

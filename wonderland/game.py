@@ -4,7 +4,7 @@ import arcade
 
 from wonderland.screens import Screen, Scene, CardCreator
 
-SCREEN_TITLE = "Wonderland Prototype"
+SCREEN_TITLE: str = "Wonderland Prototype"
 
 
 class Wonderland(arcade.Window):
@@ -12,7 +12,7 @@ class Wonderland(arcade.Window):
     Main application class of the Wonderland prototype.
     """
 
-    def __init__(self, width, height, title=SCREEN_TITLE):
+    def __init__(self, width: int, height: int, title: str = SCREEN_TITLE) -> None:
         super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.color.BLACK)
