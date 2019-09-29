@@ -1,7 +1,8 @@
+from typing import Dict
+
 import arcade
 
-from wonderland.ui import Card, CardRow, Word, WordCloud
-from wonderland.screens.scene import Scene
+from wonderland.screens import Screen, Scene, CardCreator
 
 SCREEN_TITLE = "Wonderland Prototype"
 
@@ -18,21 +19,23 @@ class Wonderland(arcade.Window):
 
         # If you have sprite lists, you should create them here,
         # and set them to None
-        self.scene = Scene()
+        self.screens: Dict[str, Screen] = {"scene": Scene(), "card_creator": CardCreator()}
+        self.current_screen: Screen = self.screens["card_creator"]
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self.get_size()[0]
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self.get_size()[1]
 
-    def setup(self):
+    def setup(self) -> None:
         # Create your sprites and sprite lists here
-        self.scene.setup(self.width, self.height)
+        for screen in self.screens.values():
+            screen.setup(self.width, self.height)
 
-    def on_draw(self):
+    def on_draw(self) -> None:
         """
         Render the screen.
         """
@@ -42,9 +45,9 @@ class Wonderland(arcade.Window):
         arcade.start_render()
 
         # Call draw() on all your sprite lists below
-        self.scene.draw()
+        self.current_screen.draw()
 
-    def update(self, delta_time):
+    def update(self, delta_time: float) -> None:
         """
         All the logic to move, and the game logic goes here.
         Normally, you'll call update() on the sprite lists that
@@ -59,7 +62,11 @@ class Wonderland(arcade.Window):
         For a full list of keys, see:
         http://arcade.academy/arcade.key.html
         """
-        pass
+        if key == arcade.key.ENTER:
+            if self.current_screen is self.screens["scene"]:
+                self.current_screen = self.screens["card_creator"]
+            else:
+                self.current_screen = self.screens["scene"]
 
     def on_key_release(self, key, key_modifiers):
         """
@@ -71,7 +78,7 @@ class Wonderland(arcade.Window):
         """
         Called whenever the mouse moves.
         """
-        self.scene.on_mouse_motion(x, y)
+        self.current_screen.on_mouse_motion(x, y)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
