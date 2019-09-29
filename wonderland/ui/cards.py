@@ -2,11 +2,12 @@ import os
 
 import arcade
 
+from wonderland.ui.ui_element_base import UIElement
 from wonderland.config import RESOURCE_PATH
 from wonderland.ui.config import FONT
 
 
-class Card(arcade.SpriteList):
+class Card(UIElement):
     """
     Represent a game world entity as a card with image and text content.
 
@@ -15,40 +16,43 @@ class Card(arcade.SpriteList):
     title_color: arcade.arcade_types.Color = arcade.color.BLACK
     title_font: str = FONT
 
-    def __init__(self, title: str, center_x: float = 0.0, center_y: float = 0.0):
+    def __init__(self, title: str, center_x: float = 0.0, center_y: float = 0.0, scale: float = 1.0):
         super().__init__()
         self.title = title
         self._center_x = center_x
         self._center_y = center_y
-        self._scale = 1.0
+        self._scale = scale
         self.background = arcade.Sprite(
             filename=os.path.join(RESOURCE_PATH, "card_background.png"),
             scale=self.scale * 0.3,
             center_x=center_x,
             center_y=center_y,
         )
-        self.append(self.background)
+        self.sprite_list = arcade.SpriteList()
+        self.sprite_list.center_x = center_x
+        self.sprite_list.center_y = center_y
+        self.sprite_list.append(self.background)
 
     @property
-    def center_x(self):
+    def center_x(self) -> float:
         return self._center_x
 
     @center_x.setter
-    def center_x(self, value):
-        self.background.center_x = value
+    def center_x(self, value: float) -> None:
+        self.sprite_list.move(value - self._center_x, 0.0)
         self._center_x = value
 
     @property
-    def center_y(self):
+    def center_y(self) -> float:
         return self._center_y
 
     @center_y.setter
-    def center_y(self, value):
-        self.background.center_y = value
+    def center_y(self, value: float) -> None:
+        self.sprite_list.move(0.0, value - self._center_y)
         self._center_y = value
 
-    def draw(self):
-        super().draw()
+    def draw(self) -> None:
+        self.sprite_list.draw()
         arcade.text.draw_text(
             text=self.title,
             color=self.title_color,
@@ -61,16 +65,16 @@ class Card(arcade.SpriteList):
         )
 
     @property
-    def scale(self):
+    def scale(self) -> float:
         return self._scale
 
     @scale.setter
-    def scale(self, value):
+    def scale(self, value: float) -> None:
         self.background.scale *= value / self._scale
         self._scale = value
 
 
-class CardRow:
+class CardRow(UIElement):
     """
     Row up cards and interact with them via mouse
 
@@ -89,10 +93,10 @@ class CardRow:
         for i, card in enumerate(reversed(self._cards)):
             card.center_x = self.center_x + self.width * (i / (len(self._cards) - 1) - 0.5)
             card.center_y = self.center_y
-            card.scale = 1
+            card.scale = 1.0
             if self.highlighted_card is card:
                 card.scale = self.highlight_scale
-                card.move(0, card.background.height * 0.2)
+                card.center_y += card.background.height * 0.2
 
     def append(self, card: Card):
         self._cards.append(card)
@@ -103,9 +107,10 @@ class CardRow:
             if card is not self.highlighted_card:
                 card.draw()
         # The highlighted card should be drawn above all others
-        self.highlighted_card.draw()
+        if self.highlighted_card is not None:
+            self.highlighted_card.draw()
 
-    def on_mouse_motion(self, x, y):
+    def on_mouse_motion(self, x: float, y: float) -> None:
         card_collision = False
         for card in self._cards:
             if card.background.collides_with_point((x, y)):

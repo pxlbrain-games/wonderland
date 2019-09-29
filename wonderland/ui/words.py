@@ -2,10 +2,11 @@ import random
 
 import arcade
 
+from wonderland.ui.ui_element_base import UIElement
 from wonderland.ui.config import FONT
 
 
-class Word:
+class Word(UIElement):
     """
     Display a word on the screen
 
@@ -44,7 +45,7 @@ class Word:
         )
 
 
-class WordCloud:
+class WordCloud(UIElement):
     """
     Arrange words in an interactive word cloud
 
@@ -61,16 +62,16 @@ class WordCloud:
         self._arrange_words()
         self.highlighted_word = None
 
-    def _arrange_words(self):
+    def _arrange_words(self) -> None:
         for word in self._words:
             word.center_x = self.center_x + (random.random() - 0.5) * self.width
             word.center_y = self.center_y + (random.random() - 0.5) * self.height
 
-    def append(self, word: Word):
+    def append(self, word: Word) -> None:
         self._words.append(word)
         self._arrange_words()
 
-    def on_mouse_motion(self, x, y):
+    def on_mouse_motion(self, x: float, y: float) -> None:
         word_collision = False
         for word in self._words:
             if word.collides_with_point((x, y)):
@@ -84,6 +85,6 @@ class WordCloud:
             self.highlighted_word.scale = 1.0
             self.highlighted_word = None
 
-    def draw(self):
+    def draw(self) -> None:
         for word in self._words:
             word.draw()
