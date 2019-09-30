@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Callable
+from typing import Dict, Callable, Optional
 
 import arcade
 
@@ -47,7 +47,7 @@ class Button(UIElement, Rectangle, Clickable):
         width: float = None,
         height: float = None,
         scale: float = 1.0,
-        on_click: Callable = None,
+        on_click: Callable[[], None] = None,
     ) -> None:
         self.text: str = text
         self.center_x = center_x
@@ -55,7 +55,7 @@ class Button(UIElement, Rectangle, Clickable):
         self.width = width if width is not None else len(text) * scale * self.font_size * 0.6
         self.height = height if height is not None else scale * self.font_size * 1.25
         self.scale: float = scale
-        self._on_click: Callable = on_click if on_click is not None else lambda: None
+        self._on_click: Callable[[], None] = on_click if on_click is not None else lambda: None
         self.state: ButtonState = ButtonState.NORMAL
         self.background: Dict[ButtonState, arcade.ShapeElementList] = {
             ButtonState.NORMAL: arcade.ShapeElementList(),

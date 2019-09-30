@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from abc import ABC, abstractmethod
 
 import arcade
@@ -67,7 +67,7 @@ class Hoverable(ABC):
 
 class UIContainer(UIElement, ABC):
 
-    active_hoverable: Hoverable = None
+    active_hoverable: Optional[Hoverable] = None
 
     @classmethod
     def _set_active_hoverable(cls, value: Hoverable):
@@ -97,7 +97,7 @@ class UIContainer(UIElement, ABC):
                 ui_element._hover_is_active = False
                 ui_element.on_hover_end()
             if hasattr(ui_element, "_ui_elements") and hasattr(ui_element, "on_mouse_motion"):
-                ui_element.on_mouse_motion(x, y)
+                ui_element.on_mouse_motion(x, y)  # type: ignore
 
     def on_mouse_press(self, x: float, y: float, button: int) -> None:
         for ui_element in self.ui_elements:
@@ -105,7 +105,7 @@ class UIContainer(UIElement, ABC):
                 if button is arcade.MOUSE_BUTTON_LEFT:
                     ui_element.on_click()
             if hasattr(ui_element, "_ui_elements") and hasattr(ui_element, "on_mouse_press"):
-                ui_element.on_mouse_press(x, y, button)
+                ui_element.on_mouse_press(x, y, button)  # type: ignore
 
 
 class Rectangle:
@@ -116,7 +116,7 @@ class Rectangle:
 
     @property
     def center_x(self) -> float:
-        return self._center_x if hasattr(self, "_center_x") else None
+        return self._center_x if hasattr(self, "_center_x") else 0.0
 
     @center_x.setter
     def center_x(self, value: float) -> None:
@@ -124,7 +124,7 @@ class Rectangle:
 
     @property
     def center_y(self) -> float:
-        return self._center_y if hasattr(self, "_center_y") else None
+        return self._center_y if hasattr(self, "_center_y") else 0.0
 
     @center_y.setter
     def center_y(self, value: float) -> None:
@@ -132,7 +132,7 @@ class Rectangle:
 
     @property
     def width(self) -> float:
-        return self._width if hasattr(self, "_width") else None
+        return self._width if hasattr(self, "_width") else 0.0
 
     @width.setter
     def width(self, value: float) -> None:
@@ -140,7 +140,7 @@ class Rectangle:
 
     @property
     def height(self) -> float:
-        return self._height if hasattr(self, "_height") else None
+        return self._height if hasattr(self, "_height") else 0.0
 
     @height.setter
     def height(self, value: float) -> None:

@@ -33,21 +33,21 @@ class Card(UIElement, Rectangle, Clickable, Hoverable):
         self.sprite_list.center_y = center_y
         self.sprite_list.append(self.background)
 
-    @Rectangle.center_x.setter
+    @Rectangle.center_x.setter  # type: ignore
     def center_x(self, value: float) -> None:
         self.sprite_list.move(value - self._center_x, 0.0)
         self._center_x = value
 
-    @Rectangle.center_y.setter
+    @Rectangle.center_y.setter  # type: ignore
     def center_y(self, value: float) -> None:
         self.sprite_list.move(0.0, value - self._center_y)
         self._center_y = value
 
-    @Rectangle.height.getter
+    @Rectangle.height.getter  # type: ignore
     def height(self) -> float:
         return self.background.height
 
-    @Rectangle.width.getter
+    @Rectangle.width.getter  # type: ignore
     def width(self) -> float:
         return self.background.width
 

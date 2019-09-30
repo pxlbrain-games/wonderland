@@ -1,3 +1,5 @@
+from typing import Optional
+
 from wonderland.screens.screen_base import Screen
 from wonderland.ui import Card, Button
 
@@ -9,8 +11,8 @@ class CardCreator(Screen):
     """
 
     def __init__(self) -> None:
-        self.card: Card = None
-        self.button: Button = None
+        self.card: Optional[Card] = None
+        self.button: Optional[Button] = None
 
     def setup(self, width: int, height: int) -> None:
         self.card = Card(title="Untitled", center_x=width / 2, center_y=height / 2, scale=3.0)

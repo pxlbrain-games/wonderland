@@ -22,11 +22,11 @@ class Word(UIElement, Rectangle, Clickable, Hoverable):
         self.center_y = center_y
         self.scale: float = 1.0
 
-    @Rectangle.width.getter
+    @Rectangle.width.getter  # type: ignore
     def width(self) -> float:
         return len(self.text) * self.scale * self.font_size * 0.5
 
-    @Rectangle.height.getter
+    @Rectangle.height.getter  # type: ignore
     def height(self) -> float:
         return self.scale * self.font_size * 1.25
 
@@ -52,7 +52,7 @@ class Word(UIElement, Rectangle, Clickable, Hoverable):
         pass
 
 
-class WordCloud(UIContainer, Hoverable):
+class WordCloud(UIContainer):
     """
     Arrange words in an interactive word cloud
 
@@ -71,7 +71,6 @@ class WordCloud(UIContainer, Hoverable):
         if words is not None:
             map(self.append, words)
         self._arrange_words()
-        self.highlighted_word: Word = None
 
     @classmethod
     def _word_on_hover(cls, word: Word):
@@ -92,24 +91,3 @@ class WordCloud(UIContainer, Hoverable):
         self._words.append(word)
         self.ui_elements.append(word)
         self._arrange_words()
-
-    def collides_with_point(self, point: arcade.arcade_types.Point) -> bool:
-        for word in self._words:
-            if word.collides_with_point(point):
-                self.highlighted_word = word
-                return True
-        self.highlighted_word = None
-        return False
-
-    def on_hover(self) -> None:
-        for word in self._words:
-            word.scale = 1.0
-        self.highlighted_word.scale = self.highlight_scale
-
-    def on_hover_end(self) -> None:
-        for word in self._words:
-            word.scale = 1.0
-
-    def draw(self) -> None:
-        for word in self._words:
-            word.draw()
