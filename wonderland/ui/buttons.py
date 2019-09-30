@@ -4,7 +4,7 @@ from typing import Dict, Callable
 import arcade
 
 from wonderland.ui.config import FONT
-from wonderland.ui.ui_element_base import UIElement
+from wonderland.ui.ui_element_base import UIElement, ClickableRectangle
 
 
 class ButtonState(Enum):
@@ -13,7 +13,7 @@ class ButtonState(Enum):
     PRESSED = 3
 
 
-class Button(UIElement):
+class Button(UIElement, ClickableRectangle):
     """
     A clickable button with text.
 
@@ -50,12 +50,12 @@ class Button(UIElement):
         on_click: Callable = None,
     ) -> None:
         self.text: str = text
-        self._center_x: float = center_x
-        self._center_y: float = center_y
-        self.width: float = width if width is not None else len(text) * scale * self.font_size * 0.6
-        self.height: float = height if height is not None else scale * self.font_size * 1.25
+        self.center_x = center_x
+        self.center_y = center_y
+        self.width = width if width is not None else len(text) * scale * self.font_size * 0.6
+        self.height = height if height is not None else scale * self.font_size * 1.25
         self.scale: float = scale
-        self.on_click: Callable = on_click if on_click is not None else lambda: None
+        self._on_click: Callable = on_click if on_click is not None else lambda: None
         self.state: ButtonState = ButtonState.NORMAL
         self.background: Dict[ButtonState, arcade.ShapeElementList] = {
             ButtonState.NORMAL: arcade.ShapeElementList(),
@@ -87,8 +87,8 @@ class Button(UIElement):
         self.background[self.state].draw()
         arcade.draw_text(
             text=self.text,
-            start_x=self._center_x,
-            start_y=self._center_y,
+            start_x=self.center_x,
+            start_y=self.center_y,
             color=self.color[self.state]["text"],
             font_size=int(self.scale * self.font_size),
             font_name=self.font,
@@ -96,10 +96,8 @@ class Button(UIElement):
             anchor_x="center",
         )
 
-    def collides_with_point(self, point: arcade.arcade_types.Point) -> bool:
-        return (self._center_x - self.width / 2 < point[0] < self._center_x + self.width / 2) and (
-            self._center_y - self.height / 2 < point[1] < self._center_y + self.height / 2
-        )
+    def on_click(self) -> None:
+        self._on_click()
 
     def on_mouse_press(self, x: float, y: float, button) -> None:
         if self.collides_with_point((x, y)) and button is arcade.MOUSE_BUTTON_LEFT:

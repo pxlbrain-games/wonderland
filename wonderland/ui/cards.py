@@ -3,12 +3,12 @@ from typing import List
 
 import arcade
 
-from wonderland.ui.ui_element_base import UIElement
+from wonderland.ui.ui_element_base import UIElement, Clickable, Rectangle
 from wonderland.config import RESOURCE_PATH
 from wonderland.ui.config import FONT
 
 
-class Card(UIElement):
+class Card(UIElement, Clickable, Rectangle):
     """
     Represent a game world entity as a card with image and text content.
 
@@ -33,36 +33,23 @@ class Card(UIElement):
         self.sprite_list.center_y = center_y
         self.sprite_list.append(self.background)
 
-    @property
-    def center_x(self) -> float:
-        return self._center_x
-
-    @center_x.setter
+    @Rectangle.center_x.setter
     def center_x(self, value: float) -> None:
         self.sprite_list.move(value - self._center_x, 0.0)
         self._center_x = value
 
-    @property
-    def center_y(self) -> float:
-        return self._center_y
-
-    @center_y.setter
+    @Rectangle.center_y.setter
     def center_y(self, value: float) -> None:
         self.sprite_list.move(0.0, value - self._center_y)
         self._center_y = value
 
-    def draw(self) -> None:
-        self.sprite_list.draw()
-        arcade.text.draw_text(
-            text=self.title,
-            color=self.title_color,
-            start_x=self.background.center_x - 0.5 * self.background.width,
-            start_y=self.background.center_y + 0.5 * self.background.height - 30 * self.scale,
-            width=int(self.background.width),
-            align="center",
-            font_name=self.title_font,
-            font_size=int(self.scale * 14),
-        )
+    @Rectangle.height.getter
+    def height(self) -> float:
+        return self.background.height
+
+    @Rectangle.width.getter
+    def width(self) -> float:
+        return self.background.width
 
     @property
     def scale(self) -> float:
@@ -73,6 +60,24 @@ class Card(UIElement):
         self.background.scale *= value / self._scale
         self._scale = value
 
+    def draw(self) -> None:
+        self.sprite_list.draw()
+        arcade.text.draw_text(
+            text=self.title,
+            color=self.title_color,
+            start_x=self.center_x - 0.5 * self.width,
+            start_y=self.center_y + 0.5 * self.height - 30 * self.scale,
+            width=int(self.width),
+            align="center",
+            font_name=self.title_font,
+            font_size=int(self.scale * 14),
+        )
+
+    def collides_with_point(self, point: arcade.arcade_types.Point) -> bool:
+        return self.background.collides_with_point(point)
+
+    def on_click(self) -> None:
+        pass
 
 class CardRow(UIElement):
     """
@@ -96,7 +101,7 @@ class CardRow(UIElement):
             card.scale = 1.0
             if self.highlighted_card is card:
                 card.scale = self.highlight_scale
-                card.center_y += card.background.height * 0.2
+                card.center_y += card.height * 0.2
 
     def append(self, card: Card) -> None:
         self._cards.append(card)
@@ -113,7 +118,7 @@ class CardRow(UIElement):
     def on_mouse_motion(self, x: float, y: float) -> None:
         card_collision = False
         for card in self._cards:
-            if card.background.collides_with_point((x, y)):
+            if card.collides_with_point((x, y)):
                 card_collision = True
                 self.highlighted_card = card
         if not card_collision:

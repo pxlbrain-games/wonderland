@@ -3,11 +3,11 @@ from typing import List
 
 import arcade
 
-from wonderland.ui.ui_element_base import UIElement
+from wonderland.ui.ui_element_base import UIElement, ClickableRectangle
 from wonderland.ui.config import FONT
 
 
-class Word(UIElement):
+class Word(UIElement, ClickableRectangle):
     """
     Display a word on the screen
 
@@ -18,22 +18,17 @@ class Word(UIElement):
 
     def __init__(self, text: str, center_x: float = 0.0, center_y: float = 0.0):
         self.text: str = text
-        self.center_x: float = center_x
-        self.center_y: float = center_y
+        self.center_x = center_x
+        self.center_y = center_y
         self.scale: float = 1.0
 
-    @property
+    @ClickableRectangle.width.getter
     def width(self) -> float:
         return len(self.text) * self.scale * self.font_size * 0.5
 
-    @property
+    @ClickableRectangle.height.getter
     def height(self) -> float:
         return self.scale * self.font_size * 1.25
-
-    def collides_with_point(self, point: arcade.arcade_types.Point) -> bool:
-        return (self.center_x - self.width / 2 < point[0] < self.center_x + self.width / 2) and (
-            self.center_y - self.height / 2 < point[1] < self.center_y + self.height / 2
-        )
 
     def draw(self) -> None:
         arcade.text.draw_text(
@@ -46,6 +41,9 @@ class Word(UIElement):
             anchor_x="center",
             anchor_y="center",
         )
+
+    def on_click(self) -> None:
+        pass
 
 
 class WordCloud(UIElement):
