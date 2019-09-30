@@ -4,7 +4,7 @@ from typing import Dict, Callable
 import arcade
 
 from wonderland.ui.config import FONT
-from wonderland.ui.ui_element_base import UIElement, ClickableRectangle
+from wonderland.ui.ui_element_base import UIElement, Clickable, Rectangle
 
 
 class ButtonState(Enum):
@@ -13,7 +13,7 @@ class ButtonState(Enum):
     PRESSED = 3
 
 
-class Button(UIElement, ClickableRectangle):
+class Button(UIElement, Rectangle, Clickable):
     """
     A clickable button with text.
 
@@ -97,9 +97,5 @@ class Button(UIElement, ClickableRectangle):
         )
 
     def on_click(self) -> None:
+        self.state = ButtonState.PRESSED
         self._on_click()
-
-    def on_mouse_press(self, x: float, y: float, button) -> None:
-        if self.collides_with_point((x, y)) and button is arcade.MOUSE_BUTTON_LEFT:
-            self.state = ButtonState.PRESSED
-            self.on_click()

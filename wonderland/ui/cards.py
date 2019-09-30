@@ -3,12 +3,12 @@ from typing import List
 
 import arcade
 
-from wonderland.ui.ui_element_base import UIElement, Clickable, Rectangle
+from wonderland.ui.ui_element_base import UIElement, UIContainer, Clickable, Hoverable, Rectangle
 from wonderland.config import RESOURCE_PATH
 from wonderland.ui.config import FONT
 
 
-class Card(UIElement, Clickable, Rectangle):
+class Card(UIElement, Rectangle, Clickable, Hoverable):
     """
     Represent a game world entity as a card with image and text content.
 
@@ -79,9 +79,16 @@ class Card(UIElement, Clickable, Rectangle):
     def on_click(self) -> None:
         pass
 
-class CardRow(UIElement):
+    def on_hover(self) -> None:
+        pass
+
+    def on_hover_end(self) -> None:
+        pass
+
+
+class CardRow(UIContainer):
     """
-    Row up cards and interact with them via mouse
+    Row up cards and interact with them via mouse.
 
     """
 
@@ -91,36 +98,33 @@ class CardRow(UIElement):
         self.center_x: float = center_x
         self.center_y: float = center_y
         self.width: float = width
-        self._cards: List[Card] = list() if cards is None else cards
-        self.highlighted_card: Card = None
+        self._cards: List[Card] = list()
+        if cards is not None:
+            map(self.append, cards)
+        self._arrange_cards()
+
+    @classmethod
+    def _card_on_hover(cls, card: Card):
+        card.scale = cls.highlight_scale
+        card.z_value = 1.0
+
+    @staticmethod
+    def _card_on_hover_end(card: Card):
+        card.scale = 1.0
+        card.z_value = 0.0
 
     def _arrange_cards(self) -> None:
         for i, card in enumerate(reversed(self._cards)):
-            card.center_x = self.center_x + self.width * (i / (len(self._cards) - 1) - 0.5)
+            card.center_x = (
+                self.center_x + self.width * (i / (len(self._cards) - 1) - 0.5)
+                if len(self._cards) > 1
+                else self.center_x
+            )
             card.center_y = self.center_y
-            card.scale = 1.0
-            if self.highlighted_card is card:
-                card.scale = self.highlight_scale
-                card.center_y += card.height * 0.2
 
     def append(self, card: Card) -> None:
+        card.on_hover = lambda: self._card_on_hover(card)
+        card.on_hover_end = lambda: self._card_on_hover_end(card)
         self._cards.append(card)
-
-    def draw(self) -> None:
+        self.ui_elements.append(card)
         self._arrange_cards()
-        for card in self._cards:
-            if card is not self.highlighted_card:
-                card.draw()
-        # The highlighted card should be drawn above all others
-        if self.highlighted_card is not None:
-            self.highlighted_card.draw()
-
-    def on_mouse_motion(self, x: float, y: float) -> None:
-        card_collision = False
-        for card in self._cards:
-            if card.collides_with_point((x, y)):
-                card_collision = True
-                self.highlighted_card = card
-        if not card_collision:
-            if self.highlighted_card:
-                self.highlighted_card = None

@@ -1,7 +1,12 @@
+from typing import List
 from abc import ABC, abstractmethod
 
+import arcade
 
-class Screen(ABC):
+from wonderland.ui import UIElement, UIContainer, Clickable, Hoverable
+
+
+class Screen(UIContainer, ABC):
     """
     Abstract base class for Wonderland screens.
 
@@ -12,13 +17,5 @@ class Screen(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def draw(self) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def on_mouse_motion(self, x: float, y: float) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def on_mouse_press(self, x: float, y: float) -> None:
+    def update(self, delta_time: float) -> None:
         raise NotImplementedError

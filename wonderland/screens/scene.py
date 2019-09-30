@@ -21,17 +21,8 @@ class Scene(Screen):
         self.player_hand = CardRow(width / 2, height * 0.2, min(width * 0.7, 724))
         for _ in range(8):
             self.player_hand.append(Card("Foobar"))
+        self.ui_elements.append(self.player_hand)
+        self.ui_elements.append(self.word_cloud)
 
-    def draw(self) -> None:
-        self.word_cloud.draw()
-        self.player_hand.draw()
-
-    def update(self) -> None:
+    def update(self, time_delta: float) -> None:
         pass
-
-    def on_mouse_press(self, x: float, y: float, button) -> None:
-        pass
-
-    def on_mouse_motion(self, x: float, y: float) -> None:
-        self.player_hand.on_mouse_motion(x, y)
-        self.word_cloud.on_mouse_motion(x, y)

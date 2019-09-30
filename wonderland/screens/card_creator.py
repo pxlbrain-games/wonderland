@@ -17,13 +17,8 @@ class CardCreator(Screen):
         self.button = Button(
             text="Click Me", center_x=width / 6, center_y=height * 0.8, scale=2.0, on_click=lambda: print("Hello")
         )
+        self.ui_elements.append(self.card)
+        self.ui_elements.append(self.button)
 
-    def draw(self) -> None:
-        self.card.draw()
-        self.button.draw()
-
-    def on_mouse_press(self, x: float, y: float, button) -> None:
-        self.button.on_mouse_press(x, y, button)
-
-    def on_mouse_motion(self, x: float, y: float) -> None:
+    def update(self, time_delta: float) -> None:
         pass
