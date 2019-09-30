@@ -14,7 +14,9 @@ class CardCreator(Screen):
 
     def setup(self, width: int, height: int) -> None:
         self.card = Card(title="Untitled", center_x=width / 2, center_y=height / 2, scale=3.0)
-        self.button = Button(text="Click Me", center_x=width / 6, center_y=height * 0.8, scale=2.0)
+        self.button = Button(
+            text="Click Me", center_x=width / 6, center_y=height * 0.8, scale=2.0, on_click=lambda: print("Hello")
+        )
 
     def draw(self) -> None:
         self.card.draw()

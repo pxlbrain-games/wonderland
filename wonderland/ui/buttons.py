@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict
+from typing import Dict, Callable
 
 import arcade
 
@@ -47,6 +47,7 @@ class Button(UIElement):
         width: float = None,
         height: float = None,
         scale: float = 1.0,
+        on_click: Callable = None,
     ) -> None:
         self.text: str = text
         self._center_x: float = center_x
@@ -54,6 +55,7 @@ class Button(UIElement):
         self.width: float = width if width is not None else len(text) * scale * self.font_size * 0.6
         self.height: float = height if height is not None else scale * self.font_size * 1.25
         self.scale: float = scale
+        self.on_click: Callable = on_click if on_click is not None else lambda: None
         self.state: ButtonState = ButtonState.NORMAL
         self.background: Dict[ButtonState, arcade.ShapeElementList] = {
             ButtonState.NORMAL: arcade.ShapeElementList(),
@@ -100,6 +102,6 @@ class Button(UIElement):
         )
 
     def on_mouse_press(self, x: float, y: float, button) -> None:
-        # print(x, y, "\n", self._center_x, self._center_y, "\n", button)
         if self.collides_with_point((x, y)) and button is arcade.MOUSE_BUTTON_LEFT:
             self.state = ButtonState.PRESSED
+            self.on_click()
