@@ -18,3 +18,7 @@ class Screen(ABC):
     @abstractmethod
     def on_mouse_motion(self, x: float, y: float) -> None:
         raise NotImplementedError
+
+    @abstractmethod
+    def on_mouse_press(self, x: float, y: float) -> None:
+        raise NotImplementedError

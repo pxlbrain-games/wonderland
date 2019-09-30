@@ -29,6 +29,9 @@ class Scene(Screen):
     def update(self) -> None:
         pass
 
+    def on_mouse_press(self, x: float, y: float, button) -> None:
+        pass
+
     def on_mouse_motion(self, x: float, y: float) -> None:
         self.player_hand.on_mouse_motion(x, y)
         self.word_cloud.on_mouse_motion(x, y)

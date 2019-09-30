@@ -84,7 +84,7 @@ class Wonderland(arcade.Window):
         """
         Called when the user presses a mouse button.
         """
-        pass
+        self.current_screen.on_mouse_press(x, y, button)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
