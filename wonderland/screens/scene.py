@@ -1,5 +1,5 @@
 from wonderland.screens.screen_base import Screen
-from wonderland.ui import CardRow, Card, WordCloud, Word
+from wonderland.ui import CardRow, Card, CardType, WordCloud, Word
 
 
 class Scene(Screen):
@@ -20,7 +20,7 @@ class Scene(Screen):
             self.word_cloud.append(Word("Hello"))
         self.player_hand = CardRow(width / 2, height * 0.2, min(width * 0.7, 724))
         for _ in range(8):
-            self.player_hand.append(Card("Foobar"))
+            self.player_hand.append(Card(CardType.CHARACTER, "Foobar", "Bizbaz"))
         self.ui_elements.append(self.player_hand)
         self.ui_elements.append(self.word_cloud)
 
