@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Green Hills",
+        "type": "place",
+        "traits": []
+    },
+    {
+        "name": "Knight",
+        "type": "character",
+        "subtype": "program",
+        "traits": [],
+        "moves": ["attack", "relocate"],
+        "essence": 2,
+        "abilities": {
+            "might": 3,
+            "resilience": 4,
+            "quickness": 1,
+            "humanity": null
+        }
+    },
+    {
+        "name": "Healing Surge",
+        "type": "glitch",
+        "effect": "Transfers essence from the bank onto target."
+    }
+]

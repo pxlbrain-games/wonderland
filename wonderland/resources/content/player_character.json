@@ -1,0 +1,13 @@
+{
+    "name": "Ser Domian of the Light",
+    "archetype": "Champion",
+    "traits": ["protector", "light"],
+    "moves": ["retreat", "attack", "rally", "relocate"],
+    "essence": 10,
+    "abilities": {
+        "might": 6,
+        "resilience": 7,
+        "quickness": 2,
+        "humanity": 5
+    }
+}
